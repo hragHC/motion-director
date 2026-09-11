@@ -1,0 +1,1 @@
+{"name":"motion-director","version":"1.0.0","private":true,"type":"module","dependencies":{"jszip":"^3.10.1","openai":"^5.19.1","pngjs":"^7.0.0"}}

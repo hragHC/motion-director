@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Motion Director</title>
+  <meta name="description" content="Transcript → AI Director → design generation → AE package" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">PODCAST MOTION GRAPHICS</div>
+        <h1>Motion Director</h1>
+      </div>
+      <div class="top-actions">
+        <span class="pill">GitHub Pages frontend</span>
+        <button class="ghost" id="settingsBtn">Backend settings</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel hero">
+        <div class="hero-copy">
+          <div class="step-label">01 / TRANSCRIPT</div>
+          <h2>Drop a timecoded transcript.</h2>
+          <p>SRT or TXT works. The AI Director will identify 25–35 meaningful motion-graphics opportunities, ranked across the episode.</p>
+        </div>
+        <div id="dropzone" class="dropzone" tabindex="0">
+          <input id="fileInput" type="file" accept=".srt,.txt,text/plain,application/x-subrip" hidden />
+          <div class="drop-icon">↑</div>
+          <strong>Drop transcript here</strong>
+          <span>or click to choose an SRT / TXT file</span>
+          <div id="fileMeta" class="file-meta"></div>
+        </div>
+        <div class="process-row">
+          <button class="primary" id="processBtn" disabled>PROCESS TRANSCRIPT</button>
+          <div id="processStatus" class="status">Waiting for transcript.</div>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="ideasSection">
+        <div class="section-head">
+          <div>
+            <div class="step-label">02 / AI DIRECTOR</div>
+            <h2>Motion-graphics opportunities</h2>
+          </div>
+          <select id="priorityFilter">
+            <option value="all">All priorities</option>
+            <option value="very_high">Very high</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div id="episodeSummary" class="episode-summary"></div>
+        <div id="ideasGrid" class="ideas-grid"></div>
+      </section>
+
+      <section class="panel hidden" id="studioSection">
+        <div class="section-head">
+          <div>
+            <div class="step-label">03 / CREATIVE STUDIO</div>
+            <h2 id="studioTitle">Select an idea</h2>
+          </div>
+          <span class="pill">Human-in-the-loop</span>
+        </div>
+        <div class="studio-layout">
+          <aside class="idea-detail" id="ideaDetail"><div class="empty-state">Choose an idea card above.</div></aside>
+          <div class="chat-wrap">
+            <div id="chatLog" class="chat-log">
+              <div class="assistant-bubble">Select an idea, then ask for changes or generate the 2×2 design panel.</div>
+            </div>
+            <div class="quick-actions">
+              <button class="chip" data-prompt="Make the idea more typographic and minimal.">More typographic</button>
+              <button class="chip" data-prompt="Use fewer icons and more negative space.">Fewer icons</button>
+              <button class="chip" data-prompt="Push this toward a premium editorial magazine look.">More editorial</button>
+            </div>
+            <div class="chat-input-row">
+              <textarea id="chatInput" rows="2" placeholder="Example: Make this more minimal and keep the speaker area clear."></textarea>
+              <button class="ghost" id="sendChatBtn">Send</button>
+            </div>
+            <button class="primary full" id="generateBtn" disabled>GENERATE 2×2 DESIGN PANEL</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="designSection">
+        <div class="section-head">
+          <div>
+            <div class="step-label">04 / DESIGN SELECTION</div>
+            <h2>Choose one panel</h2>
+          </div>
+          <div id="generationStatus" class="status"></div>
+        </div>
+        <div class="design-stage">
+          <div class="image-wrap" id="imageWrap">
+            <img id="generatedImage" alt="Generated 2x2 design panel" />
+            <div class="quadrant-grid" id="quadrantGrid">
+              <button data-q="0"><span>TOP LEFT</span></button>
+              <button data-q="1"><span>TOP RIGHT</span></button>
+              <button data-q="2"><span>BOTTOM LEFT</span></button>
+              <button data-q="3"><span>BOTTOM RIGHT</span></button>
+            </div>
+          </div>
+          <div class="selected-preview">
+            <div class="mini-label">SELECTED DESIGN</div>
+            <canvas id="selectedCanvas"></canvas>
+            <div id="selectionLabel" class="status">No panel selected.</div>
+            <button class="primary full" id="packageBtn" disabled>PACKAGE FOR AFTER EFFECTS</button>
+            <p class="microcopy">V1 package is functional but flattened: one selected design PNG + AE metadata. Automatic multi-layer splitting is the next phase.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="downloadSection">
+        <div class="step-label">05 / AE PACKAGE</div>
+        <h2>Package ready</h2>
+        <p>Your ZIP contains the selected design, a flattened layer, <code>design.json</code>, and a README.</p>
+        <a class="primary download-link" id="downloadLink" download>DOWNLOAD AE ZIP</a>
+      </section>
+    </main>
+
+    <footer>Motion Director V1 · transcript → ideas → 2×2 → selected design → AE ZIP</footer>
+  </div>
+
+  <dialog id="settingsDialog">
+    <form method="dialog" class="settings-card">
+      <h3>Backend settings</h3>
+      <p>GitHub Pages is static, so AI requests must go to a secure backend. Paste the backend URL you deploy from this same repo.</p>
+      <label>Backend URL<input id="backendInput" type="url" placeholder="https://your-backend.vercel.app" /></label>
+      <div class="dialog-actions">
+        <button class="ghost" value="cancel">Cancel</button>
+        <button class="primary" id="saveSettingsBtn" value="default">Save</button>
+      </div>
+      <p class="microcopy">Never put your OpenAI API key in this frontend or in a public GitHub file.</p>
+    </form>
+  </dialog>
+
+  <script src="./config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
